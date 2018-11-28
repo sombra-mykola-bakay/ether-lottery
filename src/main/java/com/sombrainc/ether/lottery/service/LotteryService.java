@@ -157,9 +157,12 @@ public class LotteryService extends GeneralService implements ILotteryService {
     LOGGER
         .info(COMPLETED + state + SPACE + balanceOfAddress(participate.getContractAddress(),
             Unit.KETHER) + SPACE + Unit.KETHER.name());
+
     TransactionReceipt transactionReceipt = wrap(
         LambdaExceptionUtil
-            .rethrowSupplier(() -> goodsLottery.participate(participate.getValue().toWei()).send()),
+            .rethrowSupplier(() ->
+                goodsLottery.participate(participate.getValue().toWei()).send()
+            ),
         wallet.getAddress());
     if (!transactionReceipt.isStatusOK()) {
       throw new RuntimeException();
@@ -414,7 +417,7 @@ public class LotteryService extends GeneralService implements ILotteryService {
     return String.valueOf(randomInt) + message;
   }
 
-  private String generateMessage()  {
+  private String generateMessage() {
     final byte[] bytes = new byte[10];
     new SecureRandom().nextBytes(bytes);
     Encoder encoder = Base64.getUrlEncoder().withoutPadding();

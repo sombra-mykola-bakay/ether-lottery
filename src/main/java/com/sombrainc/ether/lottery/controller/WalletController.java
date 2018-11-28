@@ -1,5 +1,6 @@
 package com.sombrainc.ether.lottery.controller;
 
+import com.sombrainc.ether.lottery.model.AddressBalance;
 import com.sombrainc.ether.lottery.model.TransferFunds;
 import com.sombrainc.ether.lottery.model.TransferFundsToAddress;
 import com.sombrainc.ether.lottery.service.WalletService;
@@ -43,8 +44,8 @@ public class WalletController {
 
   @GetMapping("/balance")
   @ApiOperation(value = "Wallet balance")
-  public String balance(Principal principal, @RequestParam Unit unit) {
-    return String.valueOf(walletService.balance(principal.getName(), unit));
+  public AddressBalance balance(Principal principal, @RequestParam Unit unit) {
+    return walletService.balance(principal.getName(), unit);
   }
 
 

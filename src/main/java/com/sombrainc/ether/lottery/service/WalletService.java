@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sombrainc.ether.lottery.dao.IWalletDao;
 import com.sombrainc.ether.lottery.entity.User;
+import com.sombrainc.ether.lottery.model.AddressBalance;
+import com.sombrainc.ether.lottery.model.EtherAmount;
 import com.sombrainc.ether.lottery.model.TransferFunds;
 import com.sombrainc.ether.lottery.model.TransferFundsToAddress;
 import com.sombrainc.ether.lottery.util.LambdaExceptionUtil;
@@ -61,7 +63,7 @@ public class WalletService extends GeneralService implements IWalletService {
         wrap(LambdaExceptionUtil.rethrowSupplier(() -> Transfer
                 .sendFunds(web3j, fromCredential,
                     toWallet.getAddress(),
-                    transferFunds.getAmount().getAmountDecimal(),
+                    transferFunds.getAmount().getAmount(),
                     transferFunds.getAmount().getUnit()).send()), fromWallet.getAddress(),
             toWallet.getAddress());
     LOGGER.info(transactionReceipt + EXPENSES + transactionReceipt.getGasUsed());
@@ -94,7 +96,7 @@ public class WalletService extends GeneralService implements IWalletService {
             Transfer
                 .sendFunds(web3j, fromCredential,
                     transferFundsToAddress.getToAddress(),
-                    transferFundsToAddress.getAmount().getAmountDecimal(),
+                    transferFundsToAddress.getAmount().getAmount(),
                     transferFundsToAddress.getAmount().getUnit()).send()
 
         ), fromCredential.getAddress(), transferFundsToAddress.getToAddress());
@@ -122,17 +124,11 @@ public class WalletService extends GeneralService implements IWalletService {
   }
 
   @Override
-  public BigDecimal balance(String email) {
+  public AddressBalance balance(String email, Unit unit) {
     com.sombrainc.ether.lottery.entity.Wallet wallet = findWallet(email).orElseThrow();
-    return super.balanceOfAddress(wallet.getAddress(),
-        Unit.GWEI);
-  }
 
-  @Override
-  public BigDecimal balance(String email, Unit unit) {
-    com.sombrainc.ether.lottery.entity.Wallet wallet = findWallet(email).orElseThrow();
-    return super.balanceOfAddress(wallet.getAddress(),
-        unit);
+    return AddressBalance.of(wallet.getAddress(), EtherAmount.of(super.balanceOfAddress(wallet.getAddress(),
+        unit) , unit));
   }
 
   @Override

@@ -3,6 +3,7 @@ package com.sombrainc.ether.lottery.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.sombrainc.ether.lottery.entity.User;
 import com.sombrainc.ether.lottery.entity.Wallet;
+import com.sombrainc.ether.lottery.model.AddressBalance;
 import com.sombrainc.ether.lottery.model.TransferFunds;
 import com.sombrainc.ether.lottery.model.TransferFundsToAddress;
 import java.io.File;
@@ -39,9 +40,7 @@ public interface IWalletService {
       Wallet wallet)
       throws IOException, CipherException;
 
-  BigDecimal balance(String email);
-
-  BigDecimal balance(String email, Unit unit);
+  AddressBalance balance(String email, Unit unit);
 
   BigDecimal balanceOfAddress(String address, Unit unit);
 
