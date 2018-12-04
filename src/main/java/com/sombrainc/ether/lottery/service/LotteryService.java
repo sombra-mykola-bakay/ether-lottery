@@ -346,11 +346,11 @@ public class LotteryService extends GeneralService implements ILotteryService {
 
 
   private void validateParticipateState(Auction auction) {
-    if (auction.getState() == AuctionState.ACTIVE) {
+    if (auction.getState() != AuctionState.ACTIVE) {
       throw new RuntimeException(AUCTION_IS_NOT_ACTIVE);
     }
 
-    if (auction.getValidTill().isAfter(LocalDateTime.now())) {
+    if (auction.getValidTill().isBefore(LocalDateTime.now())) {
       throw new RuntimeException(AUCTION_EXPIRED);
     }
   }
