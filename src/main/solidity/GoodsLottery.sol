@@ -36,8 +36,6 @@ contract GoodsLottery {
     constructor(string _lotDescription, uint _minPayableAmount, uint _minLotteryTotal, uint _biddingEnd, uint _participantsNumber,
         string _winningHash
     ) public {
-        /*        require(bytes(_lotDescription).length < 30, "Description is to long");
-                require(bytes(_winningHash).length < 30, "Hash is to long");*/
         supplier = msg.sender;
         minPayableAmount = _minPayableAmount;
         minLotteryTotal = _minLotteryTotal;
@@ -104,7 +102,6 @@ contract GoodsLottery {
     }
 
     function transferFunds() private {
-        //supplier.transfer(address(this).balance);
         state = LotteryState.CLOSED;
         selfdestruct(supplier);
     }
